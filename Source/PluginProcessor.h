@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    This file contains the basic framework code for a JUCE plugin processor.
+	This file contains the basic framework code for a JUCE plugin processor.
 
   ==============================================================================
 */
@@ -13,47 +13,53 @@
 //==============================================================================
 /**
 */
-class Basic_OscillatorAudioProcessor  : public juce::AudioProcessor
+class Basic_OscillatorAudioProcessor : public juce::AudioProcessor
 {
 public:
-    //==============================================================================
-    Basic_OscillatorAudioProcessor();
-    ~Basic_OscillatorAudioProcessor() override;
+	//==============================================================================
+	Basic_OscillatorAudioProcessor();
+	~Basic_OscillatorAudioProcessor() override;
 
-    //==============================================================================
-    void prepareToPlay (double sampleRate, int samplesPerBlock) override;
-    void releaseResources() override;
+	//==============================================================================
+	void prepareToPlay(double sampleRate, int samplesPerBlock) override;
+	void releaseResources() override;
 
-   #ifndef JucePlugin_PreferredChannelConfigurations
-    bool isBusesLayoutSupported (const BusesLayout& layouts) const override;
-   #endif
+#ifndef JucePlugin_PreferredChannelConfigurations
+	bool isBusesLayoutSupported(const BusesLayout& layouts) const override;
+#endif
 
-    void processBlock (juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
+	void processBlock(juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
 
-    //==============================================================================
-    juce::AudioProcessorEditor* createEditor() override;
-    bool hasEditor() const override;
+	//==============================================================================
+	juce::AudioProcessorEditor* createEditor() override;
+	bool hasEditor() const override;
 
-    //==============================================================================
-    const juce::String getName() const override;
+	//==============================================================================
+	const juce::String getName() const override;
 
-    bool acceptsMidi() const override;
-    bool producesMidi() const override;
-    bool isMidiEffect() const override;
-    double getTailLengthSeconds() const override;
+	bool acceptsMidi() const override;
+	bool producesMidi() const override;
+	bool isMidiEffect() const override;
+	double getTailLengthSeconds() const override;
 
-    //==============================================================================
-    int getNumPrograms() override;
-    int getCurrentProgram() override;
-    void setCurrentProgram (int index) override;
-    const juce::String getProgramName (int index) override;
-    void changeProgramName (int index, const juce::String& newName) override;
+	//==============================================================================
+	int getNumPrograms() override;
+	int getCurrentProgram() override;
+	void setCurrentProgram(int index) override;
+	const juce::String getProgramName(int index) override;
+	void changeProgramName(int index, const juce::String& newName) override;
 
-    //==============================================================================
-    void getStateInformation (juce::MemoryBlock& destData) override;
-    void setStateInformation (const void* data, int sizeInBytes) override;
+	//==============================================================================
+	void getStateInformation(juce::MemoryBlock& destData) override;
+	void setStateInformation(const void* data, int sizeInBytes) override;
 
 private:
-    //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Basic_OscillatorAudioProcessor)
+	// Declares the Osc (mine)
+	juce::dsp::Oscillator<float> osc{ [](float x) {return sin(x); } };
+
+	// Declares the gainknob to ensure audio isn't too loud.
+	juce::dsp::Gain<float> gainKnob;
+
+	//==============================================================================
+	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Basic_OscillatorAudioProcessor)
 };
